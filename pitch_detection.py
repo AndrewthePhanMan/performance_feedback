@@ -19,7 +19,7 @@ def find_frequency(audio, sample_rate, onset, next_onset=None):
 
     # Shortens the window if the next note starts before the 200 ms runtime
     if next_onset is not None:
-        window_end_time = min(window_end_time, next_onset)
+        window = min(window, next_onset)
 
     end = int(window * sample_rate) # 200 ms ahead of "start"
     end = min(end, len(audio)) # Checks if "end" goes beyond the audio's length (last note)
