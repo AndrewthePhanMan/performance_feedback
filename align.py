@@ -20,9 +20,32 @@ def notes_to_midi_list(notes):
     
     return midi_list
 
-def align(reference, performance):
+def align(reference_notes, performance_notes):
     """
-        Aligns 
+        Aligns a performed melody against a reference melody using dynamic time warping (DTW).
+
+        Parameters:
+        - reference_notes (list): List of Note objects for the reference recording.
+        - performance_notes (list): List of Note objects for the performance recording.
+
+        Returns:
+        - path (list): List of tuples that matches the indexes of both note lists
     """
 
-    _, path = fastdtw(reference, performance, dist=euclidean)
+    reference_midi = notes_to_midi_list(reference_notes)
+    performance_midi = notes_to_midi_list(performance_notes)
+
+    if len(reference_midi) == 0 or len(performance_midi) == 0:
+        raise ValueError("One of the recordings has no detectable notes.")
+    
+    reference_points = []
+    for m in reference_midi:
+        reference_points.append([m])
+
+    performance_points = []
+    for m in performance_midi:
+        performance_points.append([m])
+
+    _, path = fastdtw(reference_points, performance_points, dist=euclidean)
+
+    return path
